@@ -1,0 +1,38 @@
+"0","library(flexdashboard)"
+"0","library(here)"
+"0","library(tidyverse)"
+"0","library(""leaflet"")"
+"0","library(treemap)"
+"0","library(fontawesome)"
+"0","library(RColorBrewer)"
+"0","library(plotly)"
+"2","Warning: package ‘plotly’ was built under R version 4.1.3"
+"2","
+Attaching package: ‘plotly’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"
+"0","dados=read_csv(here(""Public_Schools.csv""))   "
+"2","[1mRows: [22m[34m103481[39m [1mColumns: [22m[34m34[39m"
+"2","[36m--[39m [1mColumn specification[22m [36m-----------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (21): NCESID, NAME, ADDRESS, ADDRESS2, CITY, STATE, ZIP, ZIP4, TELEPHONE, COUNTY, COUNTYFIPS, COUNTRY, NAICS_DESC, S...
+[32mdbl[39m  (11): X, Y, FID, TYPE, STATUS, POPULATION, LATITUDE, LONGITUDE, NAICS_CODE, ENROLLMENT, FULL_TIME_
+[34mdttm[39m  (2): SOURCE_DAT, VAL_DATE"
+"2","
+[36mi[39m Use `spec()` to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."

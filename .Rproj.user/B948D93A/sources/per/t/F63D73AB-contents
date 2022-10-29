@@ -1,0 +1,119 @@
+library(here)
+library(tidyverse)
+library("leaflet")
+library(treemap)
+library(RColorBrewer)
+
+here()
+#list.files()
+dados=read_csv(here("Public_Schools.csv"))   
+
+head(dados)
+str(dados)
+dados=dados[3:ncol(dados)]
+dados$LEVEL_
+
+colnames(dados)
+dados$DISTRICT_I |> head()
+
+unique(dados$COUNTRY) |> head() 
+
+dados |> head() |> View()
+str(dados)
+colnames(dados)
+dados |> group_by(Estado = STATE) |> summarise(Numero=n()) |> 
+  ggplot() +
+  geom_col(aes(x=reorder(Estado,Numero),y=Numero)) +
+  coord_flip() +
+  xlab('Estado') +
+  ylab('Numero de Escolas')
+
+
+table(dados$TYPE) %>%
+  as.data.frame() %>%
+  treemap("Var1", "Freq", title ="Tipos de Escolas", fontfamily.title = "serif", fontsize.title = 24)
+
+
+
+dados$COUNTY |> table() |> 
+as.data.frame() |> 
+  treemap("Var1", "Freq", title ="Cidades", fontfamily.title = "serif", fontsize.title = 24)
+
+
+dados_county= dados$COUNTY |> table() |> 
+  as.data.frame()
+
+dados_county[order(-dados_county$Freq),] |> 
+  head(10)  |> 
+  treemap("Var1", "Freq", title ="As 10 Cidades com mais Escolas", fontfamily.title = "serif", fontsize.title = 24)
+
+
+
+dados_county[order(-dados_county$Freq),] |> 
+  tail(10)  |> 
+  treemap("Var1", "Freq", title ="As 10 Cidades com menos Escolas", fontfamily.title = "serif", fontsize.title = 24)
+
+
+dados |> group_by(Estado=STATE) |> summarise(Pop_Total=sum(POPULATION),Escolas=n()) |> 
+  ggplot(aes(x=Escolas,y=Pop_Total)) +
+  geom_point() +
+  geom_smooth(method=lm , color="red", se=FALSE) +
+  xlab('Escolas') +
+  ylab('População Total de Estudantes')
+
+
+dados |> group_by(Estado=STATE) |> summarise(Pop_Total=sum(POPULATION)) |> 
+  ggplot() +
+  geom_col(aes(x=reorder(Estado,Pop_Total),y=Pop_Total)) +
+  coord_flip() +
+  xlab('Estado') +
+  ylab('População Total de Estudantes')
+
+dados |> group_by(Estado=STATE) |> summarise(Media_Pop=mean(POPULATION)) |> 
+  ggplot() +
+  geom_col(aes(x=reorder(Estado,Media_Pop),y=Media_Pop)) +
+  coord_flip() +
+  xlab('Estado') +
+  ylab('Media de Estudantes de Estudantes')
+
+colnames(dados)
+
+dados |> ggplot() +
+  geom_boxplot(aes(x=STATE, y=POPULATION)) +
+  coord_flip()
+ 
+
+dados_mapa = filter(dados, COUNTY =='BORDEN COUNTY')
+dados_mapa |> head()
+dados_mapa$LATITUDE
+
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=dados_mapa$LONGITUDE, lat=dados_mapa$LATITUDE, popup = dados_mapa$NAME)
+
+
+m
+
+
+dados_mapa = filter(dados, STATE =='TX')
+dados_mapa |> head()
+dados_mapa$LATITUDE
+
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=dados_mapa$LONGITUDE, lat=dados_mapa$LATITUDE, popup = dados_mapa$NAME)
+
+
+m
+
+library(fontawesome)
+
+f=fontawesome::fa_metadata()
+f$icon_names
+f$icon_names_fas
+f$icon_names |> as.data.frame() |> View()
+
+RColorBrewer::display.brewer.all()
+
+library(plotly)
+install.packages('plotly')

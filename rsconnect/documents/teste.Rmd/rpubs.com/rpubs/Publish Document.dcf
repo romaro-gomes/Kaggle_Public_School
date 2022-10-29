@@ -1,0 +1,11 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/963472/75fcff56c89c44b999a5c1948c267461
+bundleId: https://api.rpubs.com/api/v1/document/963472/75fcff56c89c44b999a5c1948c267461
+url: http://rpubs.com/romario_gomes/963472
+when: 1667063805.31167
+lastSyncTime: 1667063805.31167

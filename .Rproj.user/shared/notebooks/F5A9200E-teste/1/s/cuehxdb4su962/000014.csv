@@ -1,0 +1,3 @@
+"0","table(dados$NAICS_DESC) %>%"
+"0","  as.data.frame() %>%"
+"0","  treemap(""Var1"", ""Freq"", title =""Tipos de Escolas"", fontfamily.title = ""serif"", fontsize.title = 24)"

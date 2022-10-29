@@ -1,0 +1,119 @@
+---
+title: "Kaggle Dashboard: Public School"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(here)
+library(tidyverse)
+library("leaflet")
+library(treemap)
+library(fontawesome)
+library(RColorBrewer)
+library(plotly)
+dados=read_csv(here("Public_Schools.csv"))   
+
+```
+
+
+# Metricas
+
+Row {data-height=100}
+----------------------------------------------------------------
+### Cidades
+
+```{r}
+Cidade = unique(dados$CITY) |> length() 
+valueBox(Cidade, icon="fa-building")
+```
+
+### Escolas
+```{r}
+Escola = unique(dados$NAME) |> length()
+valueBox(Escola, icon="fa-school")
+```
+
+### População Total
+```{r}
+População = sum(dados$POPULATION)
+valueBox(População, icon="fa-user")
+```
+
+
+Row 
+-----------------------------------------------------------------------
+
+### Relação Número de Escolhas com a Ppopulação do Estado
+
+```{r}
+dados |> group_by(Estado=STATE) |> summarise(Pop_Total=sum(POPULATION),Escolas=n()) |> 
+  ggplot(aes(x=Escolas,y=Pop_Total)) +
+  geom_point() +
+  geom_smooth(method=lm , color="red", se=FALSE) +
+  xlab('Escolas') +
+  ylab('População Total de Estudantes')
+
+```
+
+
+# Dados
+
+Column {data-width=400}
+-----------------------------------------------------------------------
+
+### Escolas Por Nivel de Ensino
+
+```{r}
+d = dados |>
+  group_by(Tipo=LEVEL_) |> 
+  summarise(n=n()) |> 
+  ggplot() +
+  geom_col(aes(x=Tipo, y=n, fill=Tipo)) +
+  xlab('Nivel de Ensino') +
+  ylab('') +
+  theme(legend.position="none")
+
+ggplotly(d) 
+```
+
+### Número de Escola Por Estado e Território Americano
+
+```{r}
+
+
+d = dados |> group_by(Território=COUNTRY,Estado = STATE) |> summarise(Numero=n()) |> 
+  ggplot() +
+  geom_col(aes(x=reorder(Estado,Numero),y=Numero, fill=Território)) +
+  xlab('Estado') +
+  ylab('Numero de Escolas') +
+  theme(axis.text.x=element_text(size=6, angle=45))
+
+ggplotly(d)
+```
+
+Column
+---------------------------------------
+### As 10 Cidades com mais Escolas
+
+```{r}
+dados_county= dados$COUNTY |> table() |> 
+  as.data.frame()
+
+dados_county[order(-dados_county$Freq),] |> 
+  head(10)  |> 
+  treemap("Var1", "Freq", title = '', palette = RColorBrewer::brewer.pal(10,'Oranges'))
+
+```
+
+### As 10 cidades com menos Escolas
+
+```{r}
+dados_county[order(-dados_county$Freq),] |> 
+  tail(10)  |> 
+  treemap("Var1", "Freq", title = '', palette = RColorBrewer::brewer.pal(10,'Blues'))
+```
+

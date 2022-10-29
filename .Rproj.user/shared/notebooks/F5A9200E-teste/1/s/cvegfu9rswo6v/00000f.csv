@@ -1,0 +1,8 @@
+"0","dados |>"
+"0","  group_by(Tipo=LEVEL_) |> "
+"0","  summarise(n=n()) |> "
+"0","  ggplot() +"
+"0","  geom_col(aes(x=Tipo, y=n, fill=Tipo)) +"
+"0","  xlab('Nivel de Ensino') +"
+"0","  ylab('') +"
+"0","  theme(legend.position=""none"")"
